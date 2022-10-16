@@ -14,7 +14,12 @@ class AccountsWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor( element ) {
-
+    if (element === null || element == undefined) {
+      throw new Error('AccountsWidget: element === null || element == undefined');
+    }
+    this.element = element;
+    this.registerEvents();
+    this.update();
   }
 
   /**
@@ -25,7 +30,8 @@ class AccountsWidget {
    * вызывает AccountsWidget.onSelectAccount()
    * */
   registerEvents() {
-
+    document.querySelector('.create-account').onclick = e => App.getModal('createAccount').open();
+    document.querySelectorAll('.account').forEach(item => item.onclick = e => this.onSelectAccount(e));
   }
 
   /**
@@ -39,7 +45,16 @@ class AccountsWidget {
    * метода renderItem()
    * */
   update() {
-
+    if (User.current()) {
+      Account.list(null, (err, resp) =>{
+        if (resp && resp.success) {
+          this.clear();
+          resp.data.forEach(item =>{
+            this.renderItem(item);
+          });
+        }
+      })
+    }
   }
 
   /**
@@ -48,7 +63,9 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-
+    this.element.querySelectorAll('.account').forEach(
+      item => item.remove()
+    );
   }
 
   /**

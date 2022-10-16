@@ -15,24 +15,35 @@ const createRequest = (options = {}) => {
             ).join('&');
         } else {
             formData = new FormData();
-            Object.entries(data).forEach(v => formData.append(...v));
+            Object.entries(options.data).forEach(v =>{
+                const key = v[0];
+                const value = v[1];
+                console.log( `${key}: ${value}` );
+                formData.append(key, value);
+            } );
+
+            //formData.append( 'mail', 'ivan@biz.pro' );
+            //formData.append( 'password', 'odinodin' );
+
         }
     }
 
-    xhr.onload = () => {
-        let err = null;
-        let resp = null;
-        try {
-            if (xhr.response?.success) {
-                resp = xhr.response;
-            } else {
-                err = xhr.response;
+    if (options.callback) {
+        xhr.onload = () => {
+            let err = null;
+            let resp = null;
+            try {
+                if (xhr.response?.success) {
+                    resp = xhr.response;
+                } else {
+                    err = xhr.response;
+                }
+            }  catch(e) {
+                err = e;
             }
-        }  catch(e) {
-            err = e;
+            options.callback(err, resp);
         }
-        options.callback(err, resp);
+        xhr.open(options.method, url);
+        xhr.send(formData);
     }
-    xhr.open(options.method, url);
-    xhr.send(formData);
 };

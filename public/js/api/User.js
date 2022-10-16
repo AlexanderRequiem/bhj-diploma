@@ -36,10 +36,11 @@ class User {
   static fetch(callback) {
     createRequest({
       url: this.URL + '/current',
-      method: 'GET',
+      method: 'GET', 
       responseType: 'json',
       callback: (err, response) => {
         if (response && response.user) {
+          console.log('current user: '+ response.user);
           this.setCurrent(response.user);
         } else {
           this.unsetCurrent();
@@ -100,7 +101,6 @@ class User {
       url: this.URL + '/logout',
       method: 'POST',
       responseType: 'json',
-      data,
       callback: (err, response) => {
         if (response && response.successs) {
           this.unsetCurrent();
