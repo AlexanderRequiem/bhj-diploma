@@ -14,7 +14,7 @@ class AccountsWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor( element ) {
-    if (element === null || element == undefined) {
+    if (!element) {
       throw new Error('AccountsWidget: element === null || element == undefined');
     }
     this.element = element;
@@ -105,23 +105,7 @@ class AccountsWidget {
    * item - объект с данными о счёте
    * */
   getAccountHTML(item){
-    const item_li = document.createElement('li');
-    item_li.classList.add('account');
-    item_li.dataset.id = item.id;
-
-    const item_a = document.createElement('a');
-    item_a.setAttribute('href', '#');
-
-    let item_span = document.createElement('span');
-    item_span.textContent = item.name + ' ';
-    item_a.appendChild(item_span);
-
-    item_span = document.createElement('span');
-    item_span.textContent = ' ' + item.sum;
-    item_a.appendChild(item_span);
-
-    item_li.appendChild(item_a);
-    return item_li.outerHTML;
+    return `<li class="active account" data-id="${item.id}"><a href="#"><span>${item.name} </span> / <span> ${item.sum} ₽</span></a></li>`;
   }
 
   /**

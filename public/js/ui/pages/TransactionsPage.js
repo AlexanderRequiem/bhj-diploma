@@ -11,7 +11,7 @@ class TransactionsPage {
    * через registerEvents()
    * */
   constructor( element ) {
-    if (element === undefined || element === null) {
+    if (!element) {
       throw new Error('element === undefined || element === null');
     }
     this.element = element;
@@ -156,50 +156,31 @@ class TransactionsPage {
    * item - объект с информацией о транзакции
    * */
   getTransactionHTML(item){
-
-    const divMain = document.createElement('div');
-    divMain.classList.add('transaction');
-    divMain.classList.add(`transaction_${item.type}`);
-    divMain.classList.add('row');
-
-    const divDetails = document.createElement('div');
-    divDetails.innerHTML = 
-    '<div class="col-md-7 transaction__details">' +
-      '<div class="transaction__icon">'+
-        '<span class="fa fa-money fa-2x">'+
-        '</span>'+
-      '</div>'+ 
-      '<div class="transaction__info">'+
-        '<h4 class="transaction__title">'+ item.name + '</h4>' + 
-        '<div class="transaction__date">' + 
-          this.formatDate(item.created_at) +
+    const result = 
+    `<div class="transaction transaction_${item.type} row">` +
+      '<div class="col-md-7 transaction__details">' +
+        '<div class="transaction__icon">' +
+          '<span class="fa fa-money fa-2x"></span>' +
+        '</div>' +
+        '<div class="transaction__info">' +
+          '<h4 class="transaction__title">'+ item.name + '</h4>' + 
+          '<div class="transaction__date">' + 
+            this.formatDate(item.created_at) +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="col-md-3">' +
+        '<div class="transaction__summ">' + item.sum + '<span class="currency">₽</span>'+
         '</div>'+
-      '</div>'+
+      '</div>' +
+      '<div class="col-md-2 transaction__controls">'+
+        '<button class="btn btn-danger transaction__remove" data-id="'+ item.id+'">'+
+          '<i class="fa fa-trash"></i>'+
+        '</button>'+
+      '</div>' +
     '</div>';
-    divMain.appendChild(divDetails);
 
-    const divSumm = document.createElement('div');
-    divSumm.innerHTML = 
-    '<div class="col-md-3">'+
-      '<div class="transaction__summ">'+
-        item.sum +
-        '<span class="currency">'+
-          '₽'+
-        '</span>'+
-      '</div>'+
-    '</div>';
-    divMain.appendChild(divSumm);
-
-    const divControls = document.createElement('div');
-    divControls.innerHTML = 
-    '<div class="col-md-2 transaction__controls">'+
-      '<button class="btn btn-danger transaction__remove" data-id="'+ item.id+'">'+
-        '<i class="fa fa-trash">'+
-        '</i>'+
-      '</button>'+
-    '</div>';
-    divMain.appendChild(divControls);
-    return divMain.outerHTML;
+    return result;
   }
 
   /**

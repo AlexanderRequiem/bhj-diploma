@@ -23,18 +23,19 @@ const createRequest = (options = {}) => {
         xhr.onload = () => {
             let err = null;
             let resp = null;
-            try {
-                if (xhr.response?.success) {
-                    resp = xhr.response;
-                } else {
-                    err = xhr.response;
-                }
-            }  catch(e) {
-                err = e;
+            if (xhr.response?.success) {
+                resp = xhr.response;
+            } else {
+                err = xhr.response;
             }
             options.callback(err, resp);
         }
+        
+        try {
         xhr.open(options.method, url);
         xhr.send(formData);
+        }  catch(e) {
+            console.log('An error occurred while executing the request:' + e );
+        }
     }
 };

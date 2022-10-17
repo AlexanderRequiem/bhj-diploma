@@ -13,7 +13,7 @@ class AsyncForm {
    * через registerEvents()
    * */
   constructor(element) {
-    if (element === undefined || element === null) {
+    if (!element) {
        throw new Error('element === undefined || element === null');
     }
     this.element = element;

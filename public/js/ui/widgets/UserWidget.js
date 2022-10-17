@@ -12,7 +12,7 @@ class UserWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor(element){
-    if (element === null || element === undefined) {
+    if (!element) {
       throw new Error('class UserWidget: element === null || element === undefined');
     }
     this.element = element;
