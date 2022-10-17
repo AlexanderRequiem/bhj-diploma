@@ -12,6 +12,9 @@ class TransactionsWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor( element ) {
+    if (element === undefined || element === null) {
+       throw new Error('element === undefined || element === null');
+    }
     this.element = element;
     this.registerEvents();
   }
