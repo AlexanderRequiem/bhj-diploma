@@ -12,8 +12,10 @@ class TransactionsWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor( element ) {
-
+    this.element = element;
+    this.registerEvents();
   }
+  
   /**
    * Регистрирует обработчики нажатия на
    * кнопки «Новый доход» и «Новый расход».
@@ -21,6 +23,13 @@ class TransactionsWidget {
    * экземпляра окна
    * */
   registerEvents() {
-
+    this.element.onclick = e => {
+      if (e.target.classList.contains('create-income-button')) {
+        App.getModal('newIncome').open();
+      }
+      if (e.target.classList.contains('create-expense-button')) {
+        App.getModal('newExpense').open();
+      }
+    }
   }
 }

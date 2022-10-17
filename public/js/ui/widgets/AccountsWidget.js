@@ -30,8 +30,18 @@ class AccountsWidget {
    * вызывает AccountsWidget.onSelectAccount()
    * */
   registerEvents() {
-    document.querySelector('.create-account').onclick = e => App.getModal('createAccount').open();
-    document.querySelectorAll('.account').forEach(item => item.onclick = e => this.onSelectAccount(e));
+    this.element.onclick = e => {
+      if (e.target.classList.contains('create-account')) {
+        App.getModal('createAccount').open();
+      } else if (e.target.classList.contains('header')) {
+        return;
+      }
+
+      e.preventDefault();
+      this.onSelectAccount(e.target.closest('li'));
+    }
+
+    //this.element.querySelector('.create-account').onclick = e => App.getModal('createAccount').open();
   }
 
   /**
@@ -76,7 +86,17 @@ class AccountsWidget {
    * Вызывает App.showPage( 'transactions', { account_id: id_счёта });
    * */
   onSelectAccount( element ) {
+    this.element.querySelectorAll('.active.account').forEach(item => {
+      if (item !== element) {
+        item.classList.remove('active');
+      }
+    });
 
+    if (!element.classList.contains('active')) {
+      element.classList.add('active')
+    }
+
+    App.showPage( 'transactions', { account_id: element.dataset.id });
   }
 
   /**
@@ -85,7 +105,23 @@ class AccountsWidget {
    * item - объект с данными о счёте
    * */
   getAccountHTML(item){
+    const item_li = document.createElement('li');
+    item_li.classList.add('account');
+    item_li.dataset.id = item.id;
 
+    const item_a = document.createElement('a');
+    item_a.setAttribute('href', '#');
+
+    let item_span = document.createElement('span');
+    item_span.textContent = item.name + ' ';
+    item_a.appendChild(item_span);
+
+    item_span = document.createElement('span');
+    item_span.textContent = ' ' + item.sum;
+    item_a.appendChild(item_span);
+
+    item_li.appendChild(item_a);
+    return item_li.outerHTML;
   }
 
   /**
@@ -95,6 +131,6 @@ class AccountsWidget {
    * и добавляет его внутрь элемента виджета
    * */
   renderItem(data){
-
+    this.element.insertAdjacentHTML('beforeend', this.getAccountHTML(data));
   }
 }

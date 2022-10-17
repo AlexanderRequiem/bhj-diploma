@@ -40,7 +40,6 @@ class User {
       responseType: 'json',
       callback: (err, response) => {
         if (response && response.user) {
-          console.log('current user: '+ response.user);
           this.setCurrent(response.user);
         } else {
           this.unsetCurrent();
